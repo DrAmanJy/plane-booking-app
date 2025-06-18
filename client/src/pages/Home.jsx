@@ -1,4 +1,3 @@
-import React from "react";
 import { FaPlaneDeparture, FaSearch } from "react-icons/fa";
 
 const Home = () => {
