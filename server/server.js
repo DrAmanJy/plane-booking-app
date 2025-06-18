@@ -23,3 +23,56 @@ mongoose
     console.error("MongoDB connection error:", error.message);
     process.exit(1);
   });
+
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+    },
+    type: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+  },
+  {
+    versionKey: false,
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+app.post("/auth/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    const newUser = new User({
+      name,
+      email,
+      password,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
