@@ -10,7 +10,7 @@ const Signup = () => {
   const [isBluer, setIsBluer] = useState({});
   const [formError, setFormError] = useState({});
   const [disable, setDisable] = useState(true);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -22,6 +22,7 @@ const Signup = () => {
       ...prev,
       [name]: false,
     }));
+    setFormError({});
   };
 
   const handleBlur = (e) => {
@@ -59,12 +60,12 @@ const Signup = () => {
       case "password":
         if (!trimmedValue) {
           error = "Please enter your password.";
-        } else if (trimmedValue.length < 6) {
-          error = "Password must be at least 6 characters.";
         } else if (!/[0-9]/.test(trimmedValue)) {
           error = "Password must include at least one number.";
         } else if (!/[!@#$%^&*(),.?":{}|<>]/.test(trimmedValue)) {
           error = "Password must include at least one special character.";
+        } else if (trimmedValue.length < 6) {
+          error = "Password must be at least 6 characters.";
         }
         break;
 
@@ -84,7 +85,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/signup", {
+      const res = await fetch("http://localhost:9000/auth/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -93,14 +94,13 @@ const Signup = () => {
       });
 
       if (res.ok) {
-        console.log("User registered successfully");
-        navigate("/");
+        alert("Registered successfully");
+        // navigate("/");
       } else {
         const errorData = await res.json();
-        console.error(
-          "Registration failed:",
-          errorData.message || "Unknown error"
-        );
+        if (errorData.message === "Email already exists") {
+          setFormError((prev) => ({ ...prev, email: errorData.message }));
+        }
       }
     } catch (error) {
       console.error("Network or server error:", error);
