@@ -87,7 +87,7 @@ const Home = () => {
     }
 
     try {
-      const url = `https://plane-booking-app.onrender.com//flights/${query.from}-${
+      const url = `https://plane-booking-app.onrender.com/flights/${query.from}-${
         query.to
       }`;
       const res = await fetch(url);
