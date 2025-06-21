@@ -87,7 +87,7 @@ const Home = () => {
     }
 
     try {
-      const url = `${import.meta.env.VITE_API_URL}/flights/${query.from}-${
+      const url = `https://plane-booking-app.onrender.com//flights/${query.from}-${
         query.to
       }`;
       const res = await fetch(url);
