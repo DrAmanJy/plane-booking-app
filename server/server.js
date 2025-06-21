@@ -14,7 +14,7 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://plane-booking-app.onrender.com",
+    origin: "https://plane-booking-app.onrender.app",
     credentials: true,
   })
 );
