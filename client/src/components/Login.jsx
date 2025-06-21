@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +10,8 @@ const Login = () => {
   const [isBluer, setIsBluer] = useState({});
   const [formError, setFormError] = useState({});
   const [disable, setDisable] = useState(true);
-  // const navigate = useNavigate();
+  const { setType } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -73,15 +76,17 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:9000/auth/login", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         alert("Login successfully");
         const data = await res.json();
-        localStorage.setItem("user", JSON.stringify(data));
+        setType(data.type);
+        navigate("/");
       } else {
         const errorData = await res.json();
         if (errorData.message === "Email not found") {
@@ -93,7 +98,7 @@ const Login = () => {
     } catch (error) {}
   };
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4">
+    <div className="min-h-[92.5vh] bg-blue-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
           Create Account
@@ -142,9 +147,12 @@ const Login = () => {
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
           Don,t have an account?
-          <a href="#" className="text-blue-600 hover:underline">
+          <Link
+            to="/auth?type=signup"
+            className="text-blue-600 hover:underline"
+          >
             Sign Up
-          </a>
+          </Link>
         </p>
       </div>
     </div>
