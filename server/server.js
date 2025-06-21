@@ -14,7 +14,7 @@ const port = process.env.PORT;
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://plane-booking-app.onrender.com",
     credentials: true,
   })
 );
@@ -139,8 +139,8 @@ app.post("/auth/signup", async (req, res) => {
     return res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false,
-        sameSite: "Lax",
+        secure: true,
+        sameSite: "None",
         maxAge: 24 * 60 * 60 * 1000,
       })
       .status(201)
@@ -170,8 +170,8 @@ app.post("/auth/login", async (req, res) => {
       return res
         .cookie("token", token, {
           httpOnly: true,
-          secure: false,
-          sameSite: "Lax",
+          secure: true,
+          sameSite: "None",
           maxAge: 24 * 60 * 60 * 1000,
         })
         .status(200)
@@ -239,8 +239,8 @@ app.post("/auth/logout", (req, res) => {
   res
     .clearCookie("token", {
       httpOnly: true,
-      secure: false,
-      sameSite: "Lax",
+      secure: true,
+      sameSite: "None",
     })
     .status(200)
     .json({ message: "Logged out successfully" });
