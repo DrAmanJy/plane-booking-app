@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,8 @@ const Signup = () => {
   const [isBluer, setIsBluer] = useState({});
   const [formError, setFormError] = useState({});
   const [disable, setDisable] = useState(true);
-  // const navigate = useNavigate();
+  const { setType } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -85,8 +87,9 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:9000/auth/signup", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -94,8 +97,10 @@ const Signup = () => {
       });
 
       if (res.ok) {
+        const data = await res.json();
+        setType(data.type);
         alert("Registered successfully");
-        // navigate("/");
+        navigate("/");
       } else {
         const errorData = await res.json();
         if (errorData.message === "Email already exists") {
@@ -107,7 +112,7 @@ const Signup = () => {
     }
   };
   return (
-    <div className="min-h-screen bg-blue-50 flex items-center justify-center px-4">
+    <div className="min-h-[92.5vh] bg-blue-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">
           Create Account
@@ -173,9 +178,9 @@ const Signup = () => {
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
           Already have an account?{" "}
-          <a href="#" className="text-blue-600 hover:underline">
+          <Link to="/auth?type=login" className="text-blue-600 hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>
