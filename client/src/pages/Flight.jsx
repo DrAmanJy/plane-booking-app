@@ -15,7 +15,7 @@ const Flight = () => {
     const getFlight = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:9000/flight/${flightId}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/flight/${flightId}`, {
           method: "GET",
           credentials: "include",
         });
