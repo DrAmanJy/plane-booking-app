@@ -27,7 +27,7 @@ const MyTickets = () => {
 
   if (loading)
     return (
-      <div className=" flex h-[90vh] w-screen justify-center items-center gap-5">
+      <div className="bg-white flex h-[90vh] w-screen justify-center items-center gap-5">
         <span className="loading loading-bars loading-xl"></span>
       </div>
     );
