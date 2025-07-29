@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaPlaneDeparture, FaSearch } from "react-icons/fa";
-import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router";
 const cities = [
   "Delhi",
@@ -56,10 +55,10 @@ const cities = [
 ];
 const Home = () => {
   const [query, setQuery] = useState({ from: "", to: "" });
-  const { type } = useContext(AuthContext);
   const [activeField, setActiveField] = useState(null);
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [flights, setFlights] = useState([]);
   const handleInput = (e) => {
@@ -87,9 +86,8 @@ const Home = () => {
     }
 
     try {
-      const url = `${import.meta.env.VITE_API_URL}/flights/${query.from}-${
-        query.to
-      }`;
+      setLoading(true);
+      const url = `https://plane-booking-app.onrender.com/flights/${query.from}-${query.to}`;
       const res = await fetch(url);
 
       if (!res.ok) {
@@ -105,6 +103,8 @@ const Home = () => {
     } catch (err) {
       console.error("Network or server error:", err);
       alert("Something went wrong. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -195,7 +195,11 @@ const Home = () => {
           Search Flights
         </button>
       </form>
-
+      {loading && (
+        <div className=" py-20">
+          <span className="loading loading-xl loading-spinner text-error"></span>
+        </div>
+      )}
       <div className="min-h-[42vh]">
         {flights?.length > 0 && (
           <div className="w-full max-w-6xl mt-10 flex flex-wrap justify-center gap-6 px-4">

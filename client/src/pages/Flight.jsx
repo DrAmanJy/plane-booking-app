@@ -15,10 +15,13 @@ const Flight = () => {
     const getFlight = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`http://localhost:9000/flight/${flightId}`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}/flight/${flightId}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (data.message === "Unauthorized")
           throw new Error("Unauthorized, please login");

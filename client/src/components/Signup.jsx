@@ -10,7 +10,7 @@ const Signup = () => {
   });
   const [isBluer, setIsBluer] = useState({});
   const [formError, setFormError] = useState({});
-  const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { setType } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -87,6 +87,7 @@ const Signup = () => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/signup`, {
         method: "POST",
         credentials: "include",
@@ -109,6 +110,8 @@ const Signup = () => {
       }
     } catch (error) {
       console.error("Network or server error:", error);
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -173,7 +176,11 @@ const Signup = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Sign Up
+            {loading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">

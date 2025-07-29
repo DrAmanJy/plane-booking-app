@@ -9,7 +9,7 @@ const Login = () => {
   });
   const [isBluer, setIsBluer] = useState({});
   const [formError, setFormError] = useState({});
-  const [disable, setDisable] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { setType } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -76,6 +76,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
         method: "POST",
         credentials: "include",
@@ -95,7 +96,10 @@ const Login = () => {
           setFormError((prev) => ({ ...prev, password: errorData.message }));
         }
       }
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="min-h-[92.5vh] bg-blue-50 flex items-center justify-center px-4">
@@ -142,7 +146,11 @@ const Login = () => {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
           >
-            Login
+            {loading ? (
+              <span className="loading loading-spinner loading-md"></span>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <p className="text-center text-sm text-gray-500 mt-4">
