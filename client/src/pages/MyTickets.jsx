@@ -25,7 +25,12 @@ const MyTickets = () => {
     fetchTickets();
   }, []);
 
-  if (loading) return <p className="text-center mt-10">Loading tickets...</p>;
+  if (loading)
+    return (
+      <div className=" flex h-[90vh] w-screen justify-center items-center gap-5">
+        <span className="loading loading-bars loading-xl"></span>
+      </div>
+    );
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
   if (tickets.length === 0)
     return <p className="text-center mt-10">No tickets booked yet.</p>;

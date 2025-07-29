@@ -39,7 +39,11 @@ const Flight = () => {
   }, [flightId]);
 
   if (loading) {
-    return <div>Loading, please wait...</div>;
+    return (
+      <div className=" flex h-[90vh] w-screen justify-center items-center gap-5">
+        <span className="loading loading-bars loading-xl"></span>
+      </div>
+    );
   }
 
   if (error) {
